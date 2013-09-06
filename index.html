@@ -1,0 +1,418 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset=utf-8>
+        <meta name=description content="">
+        <meta name=viewport content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="http://blog.yslove.net/images/yslove.ico" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="keywords" content="UI设计，UE设计，前端开发，Wordpress开发，个人博客" />
+        <meta name="description" content="予舍驿站" />
+        <meta property="qc:admins" content="23414515147656654" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>
+            Seajs 简易文档
+        </title>
+        <link rel="stylesheet" href="http://www.yslove.net/assets/bootstrap/3/css/bootstrap.css" />
+        <style type="text/css">
+            pre code{
+                padding: 1px 4px;
+                font-size: 90%;
+                color: #C7254E;
+                white-space: nowrap;
+                background-color: #EDF1D7;
+                border-radius: 4px;
+            }
+
+            pre code.a{
+                background-color: rgba(0, 0, 0, 0);
+            }
+
+            h3{
+                margin-top: 30px;
+                margin-bottom: 20px;
+            }
+
+            /*
+             * Examples
+             *
+             * Isolated sections of example content for each component or feature. Usually
+             * followed by a code snippet.
+             */
+
+            .bs-example {
+              position: relative;
+              padding: 45px 15px 15px;
+              margin: 0 -15px 15px;
+              background-color: #fafafa;
+              box-shadow: inset 0 3px 6px rgba(0,0,0,.05);
+              border-color: #e5e5e5 #eee #eee;
+              border-style: solid;
+              border-width: 1px 0;
+            }
+            /* Echo out a label for the example */
+            .bs-example:after {
+              content: "Example";
+              position: absolute;
+              top:  15px;
+              left: 15px;
+              font-size: 12px;
+              font-weight: bold;
+              color: #bbb;
+              text-transform: uppercase;
+              letter-spacing: 1px;
+            }
+
+            /* Tweak display of the code snippets when following an example */
+            .bs-example + .highlight {
+              margin: -15px -15px 15px;
+              border-radius: 0;
+              border-width: 0 0 1px;
+            }
+
+            .bs-callout {
+                margin: 20px 0;
+                padding: 15px 30px 15px 15px;
+                border-left: 5px solid #EEE;
+            }
+            .bs-callout-warning {
+                background-color: #FEFBED;
+                border-color: #F1E7BC;
+            }
+
+            .bs-callout-info {
+                background-color: #F0F7FD;
+                border-color: #D0E3F0;
+            }
+
+            .sub-item a{
+                display: block;
+                padding: 3px 0 3px 13px;
+            }
+
+            .sub-h2{
+                font-weight: bold;
+            }
+
+            .sub-h3 a{
+                padding-left: 23px;
+            }
+
+            .active a{
+                font-weight: bold;
+                color: #563D7C;
+                background-color: rgba(0, 0, 0, 0);
+                border-left: 1px solid #563D7C;
+            }
+
+            .nav{
+                width: 400px;
+            }
+
+            .nav-bar{
+                position: fixed;
+                margin-top: 10px;
+            }
+
+            .yslove-logo{
+                position: fixed;
+                bottom:0;
+            }
+
+            .affix{
+                position: fixed;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div id="main-content" class="col-xs-12 col-lg-8">
+                    <div class="jumbotron">
+                        <h1>
+                            Seajs
+                        </h1>
+                        <p class="lead">
+                            提供简单、极致的模块化开发体验
+                        </p>
+                    </div>
+                    <div id="" class="bs-callout bs-callout-info">
+                            非官方文档，整理来自己<a href="http://seajs.org/" target="_blank">官方</a>文档的文字与实例，方便速查。
+                        </div>
+                    <!--Config Start-->
+                    <section>
+                        <h2>
+                            <a id="config">seajs.config</a><code>Object</code>
+                        </h2>
+                        <h3>
+                            <a id="alias">alias</a><code>Object</code>
+                        </h3>
+                        <p>
+                            别名配置，配置之后可在模块中使用require调用
+                            <code>
+                                require('jquery');
+                            </code>
+                        </p>
+                        <pre>
+seajs.config({
+    alias: { '<code class="a">jquery</code>': 'jquery/jquery/1.10.1/jquery' } 
+});</pre>
+<pre>
+define(function(require, exports, module) {
+    //引用jQuery模块
+    var $ = require('<code>jquery</code>');
+});</pre>
+                        <h3><a id="paths">paths</a><code>Object</code></h3>
+                        <p>设置路径，方便跨目录调用。通过灵活的设置path可以在不影响<code>base</code>的情况下指定到某个目录。</p>
+                        <pre>
+seajs.config({
+    //设置路径
+    paths: {
+        '<code class="a">gallery</code>': 'https://a.alipayobjects.com/gallery'
+    },
+
+    // 设置别名，方便调用
+    alias: {
+        '<code class="a">underscore</code>': '<code>gallery</code>/underscore'
+    }
+});</pre>
+<pre>
+define(function(require, exports, module) {
+    var _ = require('<code>underscore</code>');
+     //=> 加载的是 https://a.alipayobjects.com/gallery/underscore.js
+});
+</pre>
+                        <h3><a id="vars">vars</a><code>Object</code></h3>
+                        <p>变量配置。有些场景下，模块路径在运行时才能确定，这时可以使用 <code>vars</code> 变量来配置。</p>
+                        <p><code>vars</code> 配置的是模块标识中的变量值，在模块标识中用 <code>{key}</code> 来表示变量。</p>
+                        <pre>
+seajs.config({
+    // 变量配置
+    vars: {
+        '<code class="a">locale</code>': 'zh-cn'
+    }
+});</pre>
+<pre>
+define(function(require, exports, module) {
+  var lang = require('./i18n/<code>{locale}</code>.js');
+     //=> 加载的是 path/to/i18n/zh-cn.js
+});
+</pre>
+                        <h3><a id="map">map</a><code>Array</code></h3>
+                        <p>该配置可对模块路径进行映射修改，可用于路径转换、在线调试等。</p>
+                        <pre>
+seajs.config({
+    map: [
+        [ '.js', '-debug.js' ]
+    ]
+});</pre>
+                        <pre>
+define(function(require, exports, module) {
+    var a = require('./a');
+    //=> 加载的是 path/to/a-debug.js
+});</pre>
+                        <h3><a id="preload">preload</a><code>Array</code></h3>
+                        <p>使用<code>preload</code>配置项，可以在普通模块加载前，提前加载并初始化好指定模块。</p>
+                        <div class="bs-callout bs-callout-warning"><code>preload</code>中的空字符串会被忽略掉。</div>
+                        <pre>
+// 在老浏览器中，提前加载好 ES5 和 json 模块
+seajs.config({
+    preload: [
+        Function.prototype.bind ? '' : 'es5-safe',
+        this.JSON ? '' : 'json'
+    ]
+});</pre>
+                        <div class="bs-callout bs-callout-warning">注意：<code>preload</code>中的配置，需要等到 use 时才加载。比如：</div>
+                        <pre>
+seajs.config({
+    preload: 'a'
+});
+
+// 在加载 b 之前，会确保模块 a 已经加载并执行好
+seajs.use('./b');</pre>
+                        <div class="bs-callout bs-callout-warning">preload 配置不能放在模块文件里面：</div>
+                        <pre>
+seajs.config({
+    preload: 'a'
+});
+
+define(function(require, exports) {
+    // 此处执行时，不能保证模块 a 已经加载并执行好
+});</pre>
+                        <h3><a id="debug">debug</a><code>Boolean</code></h3>
+                        <p>值为<code>true</code>时，加载器不会删除动态插入的 script 标签。插件也可以根据<code>debug</code>配置，来决策 log 等信息的输出。</p>
+                        <h3><a id="base">base</a><code>String</code></h3>
+                        <p>Sea.js 在解析顶级标识时，会相对 base 路径来解析。</p>
+                        <div class="bs-callout bs-callout-warning">注意：一般请不要配置 base 路径，把 sea.js 放在合适的路径往往更简单一致。</div>
+                        <h3><a id="charse">charse</a><code>String | Function</code></h3>
+                        <p>获取模块文件时，&lt;script> 或 &lt;link> 标签的<code>charset</code>属性。 默认是<code>utf-8</code></p>
+                        <p><code>charset</code>还可以是一个函数：</p>
+                        <pre>
+seajs.config({
+    charset: function(url) {
+        // xxx 目录下的文件用 gbk 编码加载
+        if (url.indexOf('http://example.com/js/xxx') === 0) {
+          return 'gbk';
+        }
+
+        // 其他文件用 utf-8 编码
+        return 'utf-8';
+    }
+});</pre>
+                    </section>
+                    <!--Use Start-->
+                    <section>
+                        <h2><a id="use">seajs.use</a><code>Function</code></h2>
+                        <p>用来在页面中加载一个或多个模块。<code>seajs.use(id, callback?)</code></p>
+                        <pre>
+// 加载一个模块
+seajs.use('./a');
+
+// 加载一个模块，在加载完成时，执行回调
+seajs.use('./a', function(a) {
+  a.doSomething();
+});
+
+// 加载多个模块，在加载完成时，执行回调
+seajs.use(['./a', './b'], function(a, b) {
+  a.doSomething();
+  b.doSomething();
+});</pre>
+                        <div class="bs-callout bs-callout-warning">注意：seajs.use 与 DOM ready 事件没有任何关系。如果某些操作要确保在 DOM ready 后执行，需要使用 jquery 等类库来保证。比如</div>
+                        <pre>
+seajs.use(['jquery', './main'], function($, main) {
+    $(document).ready(function() {
+        main.init();
+    });
+});</pre>
+                    </section>
+                    <!--Use End-->
+                    <!--Cache Start-->
+                    <section>
+                        <h2><a id="cache">seajs.cache</a><code>Ojbect</code></h2>
+                        <p>通过 seajs.cache，可以查阅当前模块系统中的所有模块信息。</p>
+                        <p>比如，打开 seajs.org，然后在 WebKit Developer Tools 的 Console 面板中输入 seajs.cache，可以看到：</p>
+                        <pre>
+Object
+  > http://seajs.org/docs/assets/main.js: x
+  > https://a.alipayobjects.com/jquery/jquery/1.10.1/jquery.js: x
+  > __proto__: Object
+                        </pre>
+                        <p>这些就是文档首页用到的模块。展开某一项可以看到模块的具体信息，含义可参考：<a href="https://github.com/seajs/seajs/issues/242">CMD 模块定义规范</a> 中的 module 小节。</p>
+                    </section>
+                    <!--Cache End-->
+                    <!--Reslove Start-->
+                    <section>
+                        <h2><a id="reslove">seajs.reslove</a><code>Function</code></h2>
+                        <p>类似<code>require.resolve</code>，会利用模块系统的内部机制对传入的字符串参数进行路径解析。</p>
+                        <pre>
+seajs.resolve('jquery');
+// => http://path/to/jquery.js
+
+seajs.resolve('./a', 'http://example.com/to/b.js');
+// => http://example.com/to/a.js
+                        </pre>
+                        <div class="bs-callout bs-callout-warning">seajs.resolve 方法不光可以用来调试路径解析是否正确，还可以用在插件开发环境中。</div>
+                    </section>
+                    <!--Reslove End-->
+                    <section>
+                        <h2><a id="data">seajs.data</a><code>Object</code></h2>
+                        <p>通过 seajs.data，可以查看 seajs 所有配置以及一些内部变量的值，可用于插件开发。当加载遇到问题时，也可用于调试。</p>
+                    </section>
+                    <section>
+                        <h2><a id="a-and-a">常见问题</a></h2>
+                        <h3><a id="about-module">关于模块标识</a></h3>
+                        <p>Seajs模块标识主要以<code>小驼峰字符串</code>、<code>.</code>或<code>..</code></p>
+                            <pre>
+// 在 http://example.com/js/a.js 的 factory 中：
+require.resolve('./b');
+  // => http://example.com/js/b.js
+
+// 在 http://example.com/js/a.js 的 factory 中：
+require.resolve('../c');
+  // => http://example.com/c.js</pre>
+                            <p>分为 <b>相对</b> 与 <b>顶级</b> 标识。以<code>.</code>或<code>..</code>开头，则为相对标识 。以<code>小驼峰字符串</code>开关，则为顶级标识。</p>
+                            <pre>
+// 假设 base 路径是：http://example.com/assets/
+
+// 在模块代码里：
+require.resolve('gallery/jquery/1.9.1/jquery');
+  // => http://example.com/assets/gallery/jquery/1.9.1/jquery.js</pre>
+                            <h3><a id="about-path">关于路径</a></h3>
+                            <p>Seajs除了相对与顶级标识之外，还可以使用普通路径来加载模块。</p>
+                            <p>就到当前页面的脚本分析（可以右键查看源码）</p>
+                            <pre>
+//sea.js的路径，即 base 路径，相对于当前页面
+&lt;script src="http://yslove.net/actjs/assets/sea-modules/seajs/2.1.1/sj.js">&lt;/script>
+
+&lt;script type="text/javascript">
+//配置Seajs
+seajs.config({
+    alias: {
+        //顶级标识，基于 base 路径
+        'actjs': 'actjs/core/0.0.7/core.js',
+            // => http://
+        'position': 'actjs/util/0.0.2/position.js'
+    }
+});
+
+seajs.config({
+    alias: {
+        //普通路径，相对于当前页面
+        'affix': '../../actjs/assets/widget/src/widget-affix.js',
+
+        //相对标识，相对于当前页面
+        'init': './src/init.js'
+    }
+});
+&lt;/script></pre>
+                        <div class="bs-callout bs-callout-info">
+                            开始的时候会觉得Seajs的路径有点不习惯，由其是Base路径。切记Base路径就是sea.js的那个文件的上级路径，然后所有顶级标识，相对标识都是相对于这个Base来调整。
+                        </div>
+                    </section>
+                    <!--Config End-->
+                </div>
+                <!--侧边栏导航-->
+                <div id="sidebar" class="col-xs-6 col-lg-4">
+                    <div class="yslove-logo">
+                        <h4 class="muted">
+                            <a href="http://yslove.net">
+                                <img class="logo" src="http://yslove.net/assets/images/logo-s.png"><span class="header-title">予舍驿站</span>
+                            </a>
+                        </h4>
+                        <ul class="nav nav-pills">
+                            <li><a href="http://blog.yslove.net">博客</a></li>
+                            <li><a href="http://cn.linkedin.com/in/yslove" target="_blank">LinkedIn</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <hr class="footer-hr"/>
+            <div class="footer">
+                <p>Styles: <a href="http://getbootstrap.com/" target="_blank">Bootstrap 3.0</a></p>
+                <p>Github: <a href="https://github.com/seajs" target="_blank">@Seajs</a> <a href="https://github.com/yslove" target="_blank">@YSlove</a></p>
+                <p>© 2009-2013 <a href="http://yslove.net">予舍驿站</a> - YSlove.net 粤ICP备12091285号</p>
+            </div>
+        </div>
+
+        <script src="http://yslove.net/actjs/assets/sea-modules/seajs/2.1.1/sj.js"></script>
+        <script type="text/javascript">
+            //Base libs
+            seajs.config({
+                alias: {
+                    'actjs': 'actjs/core/0.0.7/core.js',
+                    'position': 'actjs/util/0.0.2/position.js'
+                }
+            });
+
+            seajs.config({
+                alias: {
+                    'affix': '../../actjs/assets/widget/src/widget-affix.js',
+                    'init': './src/init.js'
+                }
+            });
+
+            seajs.use(['init']);
+        </script>
+    </body>
+</html>
