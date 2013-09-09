@@ -98,25 +98,27 @@
                 padding-left: 23px;
             }
 
-            .active a{
+            .nav-bar{
+                position: fixed;
+                margin-top: 10px;
+            }
+
+            .nav-bar .active a{
                 font-weight: bold;
                 color: #563D7C;
                 background-color: rgba(0, 0, 0, 0);
                 border-left: 1px solid #563D7C;
             }
 
-            .nav{
-                width: 400px;
-            }
-
-            .nav-bar{
-                position: fixed;
-                margin-top: 10px;
+            .right-sidebar{
+                height: 242px;
+                background: #eee;
             }
 
             .yslove-logo{
                 position: fixed;
-                bottom:0;
+                margin-left: 13.5px;
+                text-align: center;
             }
 
             .affix{
@@ -162,7 +164,7 @@ define(function(require, exports, module) {
     //引用jQuery模块
     var $ = require('<code>jquery</code>');
 });</pre>
-                        <h3><a id="paths">paths</a><code>Object</code></h3>
+                    	<h3><a id="paths">paths</a><code>Object</code></h3>
                         <p>设置路径，方便跨目录调用。通过灵活的设置path可以在不影响<code>base</code>的情况下指定到某个目录。</p>
                         <pre>
 seajs.config({
@@ -371,18 +373,23 @@ seajs.config({
                         </div>
                     </section>
                     <!--Config End-->
+
+                    <div class="ds-thread"></div>
                 </div>
                 <!--侧边栏导航-->
-                <div id="sidebar" class="col-xs-6 col-lg-4">
+                <div id="sidebar" class="col-xs-6 col-lg-2">
+                </div>
+                <div class="right-sidebar col-lg-2">
                     <div class="yslove-logo">
                         <h4 class="muted">
                             <a href="http://yslove.net">
                                 <img class="logo" src="http://yslove.net/assets/images/logo-s.png"><span class="header-title">予舍驿站</span>
                             </a>
                         </h4>
-                        <ul class="nav nav-pills">
-                            <li><a href="http://blog.yslove.net">博客</a></li>
+                        <ul class="nav nav-pills nav-stacked">
+                            <li class="active"><a class="btn btn-primary btn-block" href="http://blog.yslove.net">博客</a></li>
                             <li><a href="http://cn.linkedin.com/in/yslove" target="_blank">LinkedIn</a></li>
+                            <li><a href="http://blog.yslove.net/aboutus/" target="_blank">关于</a></li>
                         </ul>
                     </div>
                 </div>
@@ -394,6 +401,20 @@ seajs.config({
                 <p>© 2009-2013 <a href="http://yslove.net">予舍驿站</a> - YSlove.net 粤ICP备12091285号</p>
             </div>
         </div>
+
+        <!-- Duoshuo Comment BEGIN -->
+        <script type="text/javascript">
+        var duoshuoQuery = {short_name:"yslove"};
+            (function() {
+                var ds = document.createElement('script');
+                ds.type = 'text/javascript';ds.async = true;
+                ds.src = 'http://static.duoshuo.com/embed.js';
+                ds.charset = 'UTF-8';
+                (document.getElementsByTagName('head')[0] 
+                || document.getElementsByTagName('body')[0]).appendChild(ds);
+            })();
+            </script>
+        <!-- Duoshuo Comment END -->
 
         <script src="http://yslove.net/actjs/assets/sea-modules/seajs/2.1.1/sj.js"></script>
         <script type="text/javascript">
@@ -413,6 +434,21 @@ seajs.config({
             });
 
             seajs.use(['init']);
+        </script>
+
+        <script type="text/javascript">
+
+          var _gaq = _gaq || [];
+          _gaq.push(['_setAccount', 'UA-8163380-1']);
+          _gaq.push(['_setDomainName', 'yslove.net']);
+          _gaq.push(['_trackPageview']);
+
+          (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+          })();
+
         </script>
     </body>
 </html>
